@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 const { filterContacts } = slice.actions;
 export const FilterForPhoneBook = () => {
   const dispatch = useDispatch();
-  const { filter } = useSelector(state => state);
+  const filter = useSelector(state => state.filter);
 
   return (
     <FilterLabelStyled>

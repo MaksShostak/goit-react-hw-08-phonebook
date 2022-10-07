@@ -6,18 +6,18 @@ import { slice } from 'redux/toolkit/slice';
 const { deleteContact, filterContacts } = slice.actions;
 
 export const PhonebookList = () => {
-  const state = useSelector(state => state);
+  const { filter, contacts } = useSelector(state => state);
   const dispatch = useDispatch();
 
   const getFilteredContact = filtered => {
-    const normalaizedFilter = state.filter.toLowerCase();
+    const normalaizedFilter = filter.toLowerCase();
 
-    const active = filtered ? filtered : state.contacts;
+    const active = filtered ? filtered : contacts;
 
     return active.filter(contact => {
       return (
         contact.name.toLowerCase().includes(normalaizedFilter) ||
-        contact.number.includes(state.filter)
+        contact.number.includes(filter)
       );
     });
   };
@@ -35,9 +35,9 @@ export const PhonebookList = () => {
             <ButtonAdd
               type="submit"
               onClick={() => {
-                filtered = state.contacts.filter(contact => contact.id !== id);
+                filtered = contacts.filter(contact => contact.id !== id);
                 getFilteredContact(filtered).length
-                  ? dispatch(filterContacts(state.filter))
+                  ? dispatch(filterContacts(filter))
                   : dispatch(filterContacts(''));
                 dispatch(deleteContact(id));
               }}

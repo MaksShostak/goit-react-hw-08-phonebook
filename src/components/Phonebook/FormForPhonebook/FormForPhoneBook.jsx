@@ -25,12 +25,12 @@ const schema = yup.object().shape({
 
 export const FormForPhoneBook = () => {
   const dispatch = useDispatch();
-  const state = useSelector(state => state);
+  const contacts = useSelector(state => state.contacts);
 
   const handleSubmitFormik = (values, { resetForm }) => {
     const { name, number } = values;
 
-    const isDuplicate = state.contacts.find(contact => {
+    const isDuplicate = contacts.find(contact => {
       return contact.name.toLowerCase() === name.toLowerCase();
     });
 
@@ -55,11 +55,10 @@ export const FormForPhoneBook = () => {
       validationSchema={schema}
     >
       <StyledForm>
-        {state.contacts.length > 0 && (
+        {contacts.length > 0 && (
           <p>
-            You have: {state.contacts.length}
-            {state.contacts.length === 1 ? ' contact' : ' contacts'} in your
-            phonebook
+            You have: {contacts.length}
+            {contacts.length === 1 ? ' contact' : ' contacts'} in your phonebook
           </p>
         )}
 
