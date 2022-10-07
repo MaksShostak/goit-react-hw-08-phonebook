@@ -9,6 +9,14 @@ export const PhonebookList = () => {
   const { filter, contacts } = useSelector(state => state);
   const dispatch = useDispatch();
 
+  const handleDelete = id => {
+    filtered = contacts.filter(contact => contact.id !== id);
+    getFilteredContact(filtered).length
+      ? dispatch(filterContacts(filter))
+      : dispatch(filterContacts(''));
+    dispatch(deleteContact(id));
+  };
+
   const getFilteredContact = filtered => {
     const normalaizedFilter = filter.toLowerCase();
 
@@ -23,6 +31,7 @@ export const PhonebookList = () => {
   };
 
   const filteredContact = getFilteredContact();
+
   let filtered = null;
   return (
     <ul>
@@ -35,11 +44,7 @@ export const PhonebookList = () => {
             <ButtonAdd
               type="submit"
               onClick={() => {
-                filtered = contacts.filter(contact => contact.id !== id);
-                getFilteredContact(filtered).length
-                  ? dispatch(filterContacts(filter))
-                  : dispatch(filterContacts(''));
-                dispatch(deleteContact(id));
+                handleDelete(id);
               }}
             >
               Delete
