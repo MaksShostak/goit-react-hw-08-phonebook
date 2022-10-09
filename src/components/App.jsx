@@ -28,8 +28,8 @@ export const App = () => {
     >
       React homework template
       <h1>Phonebook</h1>
-      {isLoading && !error && <Spiner />}
       <FormForPhoneBook />
+      {isLoading && !error && <Spiner />}
       <h2>Contacts</h2>
       <FilterForPhoneBook />
       <PhonebookList />
