@@ -1,16 +1,20 @@
 import React from 'react';
-
+// import Spiner from 'components/Spiner/Spiner';
 import { ButtonAdd } from './FormForPhonebook/FormForPhoneBook.styled';
 import { useDispatch, useSelector } from 'react-redux';
+import { deleteContact } from 'redux/toolkit/operations';
 import { slice } from 'redux/toolkit/slice';
-const { deleteContact, filterContacts } = slice.actions;
+const { filterContacts } = slice.actions;
 
 export const PhonebookList = () => {
-  const { filter, contacts } = useSelector(state => state);
+  const {
+    contacts: { items },
+    filter,
+  } = useSelector(state => state);
   const dispatch = useDispatch();
 
   const handleDelete = id => {
-    filtered = contacts.filter(contact => contact.id !== id);
+    filtered = items.filter(contact => contact.id !== id);
     getFilteredContact(filtered).length
       ? dispatch(filterContacts(filter))
       : dispatch(filterContacts(''));
@@ -20,12 +24,12 @@ export const PhonebookList = () => {
   const getFilteredContact = filtered => {
     const normalaizedFilter = filter.toLowerCase();
 
-    const active = filtered ? filtered : contacts;
+    const active = filtered ? filtered : items;
 
     return active.filter(contact => {
       return (
         contact.name.toLowerCase().includes(normalaizedFilter) ||
-        contact.number.includes(filter)
+        contact.phone.includes(filter)
       );
     });
   };
@@ -35,11 +39,11 @@ export const PhonebookList = () => {
   let filtered = null;
   return (
     <ul>
-      {filteredContact.map(({ id, name, number }) => {
+      {filteredContact.map(({ id, name, phone }) => {
         return (
           <li key={id}>
             <p>
-              {name}: {number}
+              {name}: {phone}
             </p>
             <ButtonAdd
               type="submit"

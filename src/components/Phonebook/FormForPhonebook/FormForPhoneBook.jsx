@@ -1,7 +1,7 @@
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { ButtonAdd } from './FormForPhoneBook.styled';
-import { nanoid } from 'nanoid';
+// import Spiner from 'components/Spiner/Spiner';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import {
   StyledForm,
@@ -9,14 +9,13 @@ import {
   StyledLabel,
 } from './FormForPhoneBook.styled';
 
-import { slice } from 'redux/toolkit/slice';
 import { useDispatch, useSelector } from 'react-redux';
 
-const { addContact } = slice.actions;
+import { addContact } from 'redux/toolkit/operations';
 
 const schema = yup.object().shape({
   name: yup.string().required('Please enter first and last name'),
-  number: yup
+  phone: yup
     .string()
     .min(10)
     .max(18)
@@ -25,12 +24,11 @@ const schema = yup.object().shape({
 
 export const FormForPhoneBook = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts);
+  const { items, isLoading } = useSelector(state => state.contacts);
 
   const handleSubmitFormik = (values, { resetForm }) => {
-    const { name, number } = values;
-
-    const isDuplicate = contacts.find(contact => {
+    const { name } = values;
+    const isDuplicate = items.find(contact => {
       return contact.name.toLowerCase() === name.toLowerCase();
     });
 
@@ -44,21 +42,21 @@ export const FormForPhoneBook = () => {
         clickToClose: true,
       });
     }
-    dispatch(addContact({ id: nanoid(), name: name.toUpperCase(), number }));
+    dispatch(addContact(values));
     resetForm();
   };
 
   return (
     <Formik
-      initialValues={{ name: '', number: '' }}
+      initialValues={{ name: '', phone: '' }}
       onSubmit={handleSubmitFormik}
       validationSchema={schema}
     >
       <StyledForm>
-        {contacts.length > 0 && (
+        {items.length > 0 && (
           <p>
-            You have: {contacts.length}
-            {contacts.length === 1 ? ' contact' : ' contacts'} in your phonebook
+            You have: {items.length}
+            {items.length === 1 ? ' contact' : ' contacts'} in your phonebook
           </p>
         )}
 
@@ -79,14 +77,16 @@ export const FormForPhoneBook = () => {
           <StyledField
             placeholder="+380932600501"
             type="tel"
-            name="number"
+            name="phone"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
           />
-          <ErrorMessage name="number" component="div" />
+          <ErrorMessage name="phone" component="div" />
         </StyledLabel>
-        <ButtonAdd type="submit">Add contact</ButtonAdd>
+        <ButtonAdd type="submit" disabled={isLoading}>
+          Add contact
+        </ButtonAdd>
       </StyledForm>
     </Formik>
   );
