@@ -1,14 +1,14 @@
 import { PhonebookList } from './Phonebook/PhoneBookList';
 import { FormForPhoneBook } from './Phonebook/FormForPhonebook/FormForPhoneBook';
-
+import { selectContacts } from 'redux/toolkit/selector';
 import { FilterForPhoneBook } from './Phonebook/FilterForPhonbook/FilterForPhoneBook';
-import Spiner from './Spiner/Spiner';
+import { Spiner } from './Spiner/Spiner';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchContacts } from 'redux/toolkit/operations';
 export const App = () => {
   const dispath = useDispatch();
-  const { isLoading, error } = useSelector(state => state.contacts);
+  const { isLoading, error } = useSelector(selectContacts);
   useEffect(() => {
     dispath(fetchContacts());
   }, [dispath]);

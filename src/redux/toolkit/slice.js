@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchContacts, addContact, deleteContact } from './operations';
+import {
+  fetchContacts,
+  addContact,
+  deleteContact,
+  changeContact,
+} from './operations';
 
 const initialState = {
   contacts: {
@@ -24,14 +29,14 @@ export const slice = createSlice({
     },
     [fetchContacts.fulfilled]({ contacts }, { payload }) {
       contacts.isLoading = false;
-      // contacts.error = null;
+      contacts.error = null;
       contacts.items = payload;
-      contacts.error = false;
+      // contacts.error = false;
     },
     [fetchContacts.rejected]({ contacts }, { payload }) {
       contacts.isLoading = false;
-      contacts.error = true;
-      // contacts.error = payload;
+
+      contacts.error = payload;
     },
 
     [addContact.pending]({ contacts }) {
@@ -50,8 +55,6 @@ export const slice = createSlice({
       contacts.isLoading = true;
     },
     [deleteContact.fulfilled]({ contacts }, { payload }) {
-      console.log('afdsa', contacts);
-      console.log(payload);
       contacts.isLoading = false;
       contacts.items = contacts.items.filter(
         contact => contact.id !== payload.id
@@ -59,6 +62,20 @@ export const slice = createSlice({
       contacts.error = null;
     },
     [deleteContact.rejected]({ contacts }, { payload }) {
+      contacts.isLoading = false;
+      contacts.error = payload;
+    },
+    [changeContact.pending]({ contacts }) {
+      contacts.isLoading = true;
+    },
+    [changeContact.fulfilled]({ contacts }, { payload }) {
+      contacts.isLoading = false;
+      contacts.items = contacts.items.map(contact =>
+        Number(contact.id) === Number(payload.id) ? payload : contact
+      );
+      contacts.error = null;
+    },
+    [changeContact.rejected]({ contacts }, { payload }) {
       contacts.isLoading = false;
       contacts.error = payload;
     },

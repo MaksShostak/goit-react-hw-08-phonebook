@@ -1,17 +1,18 @@
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import { ButtonAdd } from './FormForPhoneBook.styled';
 // import Spiner from 'components/Spiner/Spiner';
+import { useState } from 'react';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import { ButtonSpiner } from 'components/Spiner/Spiner';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectContacts, selectContactCount } from 'redux/toolkit/selector';
+import { addContact } from 'redux/toolkit/operations';
+import { ButtonAdd } from './FormForPhoneBook.styled';
 import {
   StyledForm,
   StyledField,
   StyledLabel,
 } from './FormForPhoneBook.styled';
-
-import { useDispatch, useSelector } from 'react-redux';
-
-import { addContact } from 'redux/toolkit/operations';
 
 const schema = yup.object().shape({
   name: yup.string().required('Please enter first and last name'),
@@ -23,11 +24,14 @@ const schema = yup.object().shape({
 });
 
 export const FormForPhoneBook = () => {
+  const [input, setInput] = useState(null);
   const dispatch = useDispatch();
-  const { items, isLoading } = useSelector(state => state.contacts);
+  const { items, isLoading } = useSelector(selectContacts);
+  const countContact = useSelector(selectContactCount);
 
   const handleSubmitFormik = (values, { resetForm }) => {
     const { name } = values;
+    setInput(values);
     const isDuplicate = items.find(contact => {
       return contact.name.toLowerCase() === name.toLowerCase();
     });
@@ -53,10 +57,10 @@ export const FormForPhoneBook = () => {
       validationSchema={schema}
     >
       <StyledForm>
-        {items.length > 0 && (
+        {countContact > 0 && (
           <p>
-            You have: {items.length}
-            {items.length === 1 ? ' contact' : ' contacts'} in your phonebook
+            You have: {countContact}
+            {countContact === 1 ? ' contact' : ' contacts'} in your phonebook
           </p>
         )}
 
@@ -85,6 +89,7 @@ export const FormForPhoneBook = () => {
           <ErrorMessage name="phone" component="div" />
         </StyledLabel>
         <ButtonAdd type="submit" disabled={isLoading}>
+          {isLoading && input !== '' && <ButtonSpiner />}
           Add contact
         </ButtonAdd>
       </StyledForm>

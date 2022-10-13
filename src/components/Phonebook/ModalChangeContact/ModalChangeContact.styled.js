@@ -1,7 +1,26 @@
 import styled from 'styled-components';
-import { Form, Field } from 'formik';
 
-export const ButtonAdd = styled.button`
+export const Overlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1200;
+`;
+
+export const ModalForm = styled.form`
+  max-width: calc(100vw - 48px);
+  max-height: calc(100vh - 24px);
+  background-color: ${({ theme }) => theme.colors.bglite};
+  padding: ${({ theme }) => theme.space[6]}px;
+`;
+
+export const ButtonChange = styled.button`
   font-size: ${({ theme }) => theme.fontSizes.ml};
   margin-left: auto;
   margin-right: auto;
@@ -25,11 +44,8 @@ export const ButtonAdd = styled.button`
     box-shadow: 5px 5px 5px ${({ theme }) => theme.colors.black};
   }
 `;
-export const StyledForm = styled(Form)`
-  background-color: ${({ theme }) => theme.colors.bglite};
-  padding: ${({ theme }) => theme.space[6]}px;
-`;
-export const StyledField = styled(Field)`
+
+export const StyledInput = styled.input`
   border: 4px solid;
   display: block;
   height: 40px;
