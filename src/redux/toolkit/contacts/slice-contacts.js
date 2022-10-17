@@ -4,7 +4,7 @@ import {
   addContact,
   deleteContact,
   changeContact,
-} from './operations';
+} from 'redux/toolkit/contacts/operations-contacts';
 
 const initialState = {
   contacts: {
@@ -15,7 +15,7 @@ const initialState = {
   filter: '',
 };
 
-export const slice = createSlice({
+const sliceContacts = createSlice({
   name: 'contacts',
   initialState: initialState,
   reducers: {
@@ -55,10 +55,9 @@ export const slice = createSlice({
       contacts.isLoading = true;
     },
     [deleteContact.fulfilled]({ contacts }, { payload }) {
+      console.log(payload);
       contacts.isLoading = false;
-      contacts.items = contacts.items.filter(
-        contact => contact.id !== payload.id
-      );
+      contacts.items = contacts.items.filter(contact => contact.id !== payload);
       contacts.error = null;
     },
     [deleteContact.rejected]({ contacts }, { payload }) {
@@ -71,7 +70,7 @@ export const slice = createSlice({
     [changeContact.fulfilled]({ contacts }, { payload }) {
       contacts.isLoading = false;
       contacts.items = contacts.items.map(contact =>
-        Number(contact.id) === Number(payload.id) ? payload : contact
+        contact.id === payload.id ? payload : contact
       );
       contacts.error = null;
     },
@@ -81,3 +80,5 @@ export const slice = createSlice({
     },
   },
 });
+export default sliceContacts.reducer;
+export const { filterContacts } = sliceContacts.actions;

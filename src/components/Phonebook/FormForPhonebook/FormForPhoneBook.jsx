@@ -1,22 +1,27 @@
 import { Formik, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 // import Spiner from 'components/Spiner/Spiner';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-import { ButtonSpiner } from 'components/Spiner/Spiner';
+// import { ButtonSpiner } from 'components/Spiner/Spiner';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectContacts, selectContactCount } from 'redux/toolkit/selector';
-import { addContact } from 'redux/toolkit/operations';
-import { ButtonAdd } from './FormForPhoneBook.styled';
+import {
+  selectContacts,
+  selectContactCount,
+} from 'redux/toolkit/contacts/selector-contacts';
+import { addContact } from 'redux/toolkit/contacts/operations-contacts';
+
 import {
   StyledForm,
   StyledField,
   StyledLabel,
+  ButtonAdd,
+  Counter,
 } from './FormForPhoneBook.styled';
 
 const schema = yup.object().shape({
   name: yup.string().required('Please enter first and last name'),
-  phone: yup
+  number: yup
     .string()
     .min(10)
     .max(18)
@@ -24,14 +29,17 @@ const schema = yup.object().shape({
 });
 
 export const FormForPhoneBook = () => {
-  const [input, setInput] = useState(null);
+  // const [input, setInput] = useState(null);
   const dispatch = useDispatch();
   const { items, isLoading } = useSelector(selectContacts);
+
   const countContact = useSelector(selectContactCount);
 
   const handleSubmitFormik = (values, { resetForm }) => {
+    console.log(values);
     const { name } = values;
-    setInput(values);
+
+    // setInput(values);
     const isDuplicate = items.find(contact => {
       return contact.name.toLowerCase() === name.toLowerCase();
     });
@@ -52,16 +60,16 @@ export const FormForPhoneBook = () => {
 
   return (
     <Formik
-      initialValues={{ name: '', phone: '' }}
+      initialValues={{ name: '', number: '' }}
       onSubmit={handleSubmitFormik}
       validationSchema={schema}
     >
       <StyledForm>
         {countContact > 0 && (
-          <p>
+          <Counter>
             You have: {countContact}
             {countContact === 1 ? ' contact' : ' contacts'} in your phonebook
-          </p>
+          </Counter>
         )}
 
         <StyledLabel>
@@ -81,15 +89,15 @@ export const FormForPhoneBook = () => {
           <StyledField
             placeholder="+380932600501"
             type="tel"
-            name="phone"
+            name="number"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
             required
           />
-          <ErrorMessage name="phone" component="div" />
+          <ErrorMessage name="number" component="div" />
         </StyledLabel>
         <ButtonAdd type="submit" disabled={isLoading}>
-          {isLoading && input !== '' && <ButtonSpiner />}
+          {/* {isLoading && input !== '' && <ButtonSpiner />} */}
           Add contact
         </ButtonAdd>
       </StyledForm>

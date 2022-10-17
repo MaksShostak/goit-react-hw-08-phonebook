@@ -1,38 +1,17 @@
-import { PhonebookList } from './Phonebook/PhoneBookList';
-import { FormForPhoneBook } from './Phonebook/FormForPhonebook/FormForPhoneBook';
-import { selectContacts } from 'redux/toolkit/selector';
-import { FilterForPhoneBook } from './Phonebook/FilterForPhonbook/FilterForPhoneBook';
-import { Spiner } from './Spiner/Spiner';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchContacts } from 'redux/toolkit/operations';
-export const App = () => {
-  const dispath = useDispatch();
-  const { isLoading, error } = useSelector(selectContacts);
-  useEffect(() => {
-    dispath(fetchContacts());
-  }, [dispath]);
+import { selectToken } from 'redux/toolkit/authorization/selector-auth';
 
-  return (
-    <div
-      style={{
-        backgroundColor: 'rgb(225, 179, 152)',
-        // height: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101',
-      }}
-    >
-      React homework template
-      <h1>Phonebook</h1>
-      <FormForPhoneBook />
-      {isLoading && !error && <Spiner />}
-      <h2>Contacts</h2>
-      <FilterForPhoneBook />
-      <PhonebookList />
-    </div>
-  );
+import Router from './Router/Router';
+import { currentUser } from 'redux/toolkit/authorization/operations-auth';
+
+export const App = () => {
+  const dispatch = useDispatch();
+  const token = useSelector(selectToken);
+
+  useEffect(() => {
+    if (token) dispatch(currentUser());
+  }, [token, dispatch]);
+
+  return <Router />;
 };

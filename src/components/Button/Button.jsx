@@ -1,8 +1,8 @@
-import React from 'react';
-import { Mybutton } from './Button.styled';
+// import React from 'react';
+// import { Mybutton } from './Button.styled';
 
-const Button = ({ children }) => {
-  return <Mybutton>{children}</Mybutton>;
-};
+// const Button = ({ children }) => {
+//   return <Mybutton>{children}</Mybutton>;
+// };
 
-export default Button;
+// export default Button;

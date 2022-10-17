@@ -4,7 +4,17 @@ import { Dna, ProgressBar } from 'react-loader-spinner';
 
 export const Spiner = () => {
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', margin: '30px' }}>
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        margin: '30px',
+        position: 'absolute',
+        left: '42%',
+
+        top: '48%',
+      }}
+    >
       <Dna
         visible={true}
         height="80"

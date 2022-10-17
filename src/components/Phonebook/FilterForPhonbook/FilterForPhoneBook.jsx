@@ -1,25 +1,29 @@
 import React from 'react';
-import { selectFilter } from 'redux/toolkit/selector';
-import { FilterLabelStyled, StyledInput } from './FilterForPhoneBook.styled';
-import { slice } from 'redux/toolkit/slice';
+import { selectFilter } from 'redux/toolkit/contacts/selector-contacts';
+import {
+  FilterLabelStyled,
+  StyledInput,
+  Container,
+} from './FilterForPhoneBook.styled';
+import { filterContacts } from 'redux/toolkit/contacts/slice-contacts';
 import { useDispatch, useSelector } from 'react-redux';
-
-const { filterContacts } = slice.actions;
 
 export const FilterForPhoneBook = () => {
   const dispatch = useDispatch();
   const filter = useSelector(selectFilter);
 
   return (
-    <FilterLabelStyled>
-      Find contacts by name
-      <StyledInput
-        type="text"
-        value={filter}
-        onChange={e => {
-          dispatch(filterContacts(e.target.value));
-        }}
-      />
-    </FilterLabelStyled>
+    <Container>
+      <FilterLabelStyled>
+        Find contacts by name
+        <StyledInput
+          type="text"
+          value={filter}
+          onChange={e => {
+            dispatch(filterContacts(e.target.value));
+          }}
+        />
+      </FilterLabelStyled>
+    </Container>
   );
 };
