@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { changeContact } from 'redux/toolkit/contacts/operations-contacts';
 import { selectItems } from 'redux/toolkit/contacts/selector-contacts';
 import { IoCloseOutline } from 'react-icons/io5';
+import PropTypes from 'prop-types';
 
 import {
   StyledLabel,
@@ -14,6 +15,9 @@ import {
 } from './ModalChangeContact.styled';
 
 const ModalChangeContact = ({ modalIsOpen, closeModal }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
   const dispatch = useDispatch();
   const items = useSelector(selectItems);
   useEffect(() => {
@@ -31,38 +35,44 @@ const ModalChangeContact = ({ modalIsOpen, closeModal }) => {
     };
   }, [closeModal, modalIsOpen]);
 
+  const handleChange = event => {
+    const { name, value } = event.target;
+    switch (name) {
+      case 'name':
+        return setName(value);
+      case 'number':
+        return setNumber(value);
+      default:
+        return;
+    }
+  };
   const handleSubmit = e => {
     e.preventDefault();
 
     const isDuplicate = items.find(contact => {
-      return (
-        contact.name.toLowerCase() ===
-        e.target.elements.name.value.toLowerCase()
-      );
+      return contact.name.toLowerCase() === name.toLowerCase();
     });
 
     if (isDuplicate) {
-      return Notify.warning(
-        `${e.target.elements.name.value} is already in contacts`,
-        {
-          backOverlay: true,
-          timeout: 2000,
-          position: 'center-top',
-          fontSize: '34px',
-          width: '600px',
-          clickToClose: true,
-        }
-      );
+      return Notify.warning(`${name} is already in contacts`, {
+        backOverlay: true,
+        timeout: 2000,
+        position: 'center-top',
+        fontSize: '34px',
+        width: '600px',
+        clickToClose: true,
+      });
     }
 
     dispatch(
       changeContact({
-        name: e.target.elements.name.value,
-        number: e.target.elements.number.value,
+        name,
+        number,
         id: modalIsOpen,
       })
     );
-    e.target.reset();
+    setName('');
+    setNumber('');
     closeModal();
   };
 
@@ -88,16 +98,33 @@ const ModalChangeContact = ({ modalIsOpen, closeModal }) => {
 
         <StyledLabel htmlFor="">
           Name
-          <StyledInput type="text" name="name" />
+          <StyledInput
+            type="text"
+            placeholder="Name"
+            name="name"
+            value={name}
+            onChange={handleChange}
+          />
         </StyledLabel>
         <StyledLabel htmlFor="">
           Phone
-          <StyledInput type="tel" name="number" />
+          <StyledInput
+            type="tel"
+            name="number"
+            placeholder="Tel"
+            value={number}
+            onChange={handleChange}
+          />
         </StyledLabel>
         <ButtonChange type="submit">Push changes</ButtonChange>
       </ModalForm>
     </Overlay>
   );
+};
+
+ModalChangeContact.propTypes = {
+  modalIsOpen: PropTypes.string,
+  closeModal: PropTypes.func.isRequired,
 };
 
 export default ModalChangeContact;

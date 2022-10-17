@@ -12,13 +12,24 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordShown, setPasswordShown] = useState(false);
-  const togglePassword = () => {
-    setPasswordShown(!passwordShown);
+
+  const options = {
+    email: setEmail,
+    password: setPassword,
+  };
+
+  const onInputChange = event => {
+    const { name, value } = event.target;
+    options[name](value);
   };
   const onSubmit = e => {
     e.preventDefault();
     dispatch(login({ email, password }));
-    e.target.reset();
+    setEmail('');
+    setPassword('');
+  };
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
   };
   return (
     <Form onSubmit={onSubmit}>
@@ -27,9 +38,9 @@ function LoginForm() {
         <Form.Control
           type="email"
           placeholder="Enter email"
-          onChange={e => {
-            setEmail(e.target.value);
-          }}
+          onChange={onInputChange}
+          value={email}
+          name="email"
         />
         <Form.Text className="text-muted"></Form.Text>
       </Form.Group>
@@ -43,9 +54,9 @@ function LoginForm() {
         <Form.Control
           type={passwordShown ? 'text' : 'password'}
           placeholder="Password"
-          onChange={e => {
-            setPassword(e.target.value);
-          }}
+          onChange={onInputChange}
+          value={password}
+          name="password"
         />
         <BiShow
           onClick={togglePassword}

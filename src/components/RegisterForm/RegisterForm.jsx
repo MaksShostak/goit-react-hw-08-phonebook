@@ -13,6 +13,18 @@ function RegisterForm() {
   const [password, setPassword] = useState('');
   const [passwordShown, setPasswordShown] = useState(false);
 
+  const handleChange = ({ target: { name, value } }) => {
+    switch (name) {
+      case 'name':
+        return setName(value);
+      case 'email':
+        return setEmail(value);
+      case 'password':
+        return setPassword(value);
+      default:
+        return;
+    }
+  };
   const togglePassword = () => {
     setPasswordShown(!passwordShown);
   };
@@ -20,7 +32,9 @@ function RegisterForm() {
   const onSubmit = e => {
     e.preventDefault();
     dispatch(register({ name, email, password }));
-    e.target.reset();
+    setName('');
+    setEmail('');
+    setPassword('');
   };
   return (
     <Form onSubmit={onSubmit}>
@@ -29,9 +43,9 @@ function RegisterForm() {
         <Form.Control
           type="text"
           placeholder="Name"
-          onChange={e => {
-            setName(e.target.value);
-          }}
+          name="name"
+          value={name}
+          onChange={handleChange}
         />
       </Form.Group>
       <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -39,9 +53,9 @@ function RegisterForm() {
         <Form.Control
           type="email"
           placeholder="Enter email"
-          onChange={e => {
-            setEmail(e.target.value);
-          }}
+          name="email"
+          value={email}
+          onChange={handleChange}
         />
         <Form.Text className="text-muted"></Form.Text>
       </Form.Group>
@@ -55,9 +69,9 @@ function RegisterForm() {
         <Form.Control
           type={passwordShown ? 'text' : 'password'}
           placeholder="Password"
-          onChange={e => {
-            setPassword(e.target.value);
-          }}
+          name="password"
+          value={password}
+          onChange={handleChange}
         />
         <BiShow
           onClick={togglePassword}

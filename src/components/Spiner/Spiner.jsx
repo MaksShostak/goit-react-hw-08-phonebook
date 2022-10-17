@@ -1,7 +1,5 @@
 import { Dna, ProgressBar } from 'react-loader-spinner';
 
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-
 export const Spiner = () => {
   return (
     <div
@@ -10,7 +8,7 @@ export const Spiner = () => {
         justifyContent: 'center',
         margin: '30px',
         position: 'absolute',
-        left: '42%',
+        left: '45%',
 
         top: '48%',
       }}
