@@ -5,12 +5,13 @@ import { changeContact } from 'redux/toolkit/contacts/operations-contacts';
 import { selectItems } from 'redux/toolkit/contacts/selector-contacts';
 import { IoCloseOutline } from 'react-icons/io5';
 import PropTypes from 'prop-types';
+import Button from 'components/Button/Button';
 
 import {
   StyledLabel,
   Overlay,
   StyledInput,
-  ButtonChange,
+  // ButtonChange,
   ModalForm,
 } from './ModalChangeContact.styled';
 
@@ -52,7 +53,16 @@ const ModalChangeContact = ({ modalIsOpen, closeModal }) => {
     const isDuplicate = items.find(contact => {
       return contact.name.toLowerCase() === name.toLowerCase();
     });
-
+    if (!name || !number) {
+      return Notify.warning(`fill in all the fields to change`, {
+        backOverlay: true,
+        timeout: 2000,
+        position: 'center-top',
+        fontSize: '34px',
+        width: '600px',
+        clickToClose: true,
+      });
+    }
     if (isDuplicate) {
       return Notify.warning(`${name} is already in contacts`, {
         backOverlay: true,
@@ -104,6 +114,9 @@ const ModalChangeContact = ({ modalIsOpen, closeModal }) => {
             name="name"
             value={name}
             onChange={handleChange}
+            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+            title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
+            required
           />
         </StyledLabel>
         <StyledLabel htmlFor="">
@@ -114,9 +127,12 @@ const ModalChangeContact = ({ modalIsOpen, closeModal }) => {
             placeholder="Tel"
             value={number}
             onChange={handleChange}
+            pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+            title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+            required
           />
         </StyledLabel>
-        <ButtonChange type="submit">Push changes</ButtonChange>
+        <Button type="submit">Push changes</Button>
       </ModalForm>
     </Overlay>
   );

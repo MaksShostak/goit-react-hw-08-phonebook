@@ -42,9 +42,6 @@ export const currentUser = createAsyncThunk(
   'auth/currentUser',
   async (_, thunkApi) => {
     try {
-      // if (thunkApi.getState().auth.token === null) {
-      //   return;
-      // }
       forAxiosToken.set(thunkApi.getState().auth.token);
       const { data } = await axios.get('/users/current');
       return data;

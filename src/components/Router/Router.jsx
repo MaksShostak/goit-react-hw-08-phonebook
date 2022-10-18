@@ -14,11 +14,12 @@ const Router = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
+        <Route index element={<Navigate to="/home" />} />
         <Route path="home" element={<Home />} />
         <Route
           path="register"
           element={
-            <PublicRoute redirect="/login" restricted>
+            <PublicRoute redirect="/contacts" restricted>
               <Register />
             </PublicRoute>
           }
@@ -40,7 +41,7 @@ const Router = () => {
           }
         />
       </Route>
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="*" element={<Navigate to="/register" />} />
     </Routes>
   );
 };

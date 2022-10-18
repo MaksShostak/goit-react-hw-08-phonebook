@@ -10,12 +10,12 @@ import {
   selectContactCount,
 } from 'redux/toolkit/contacts/selector-contacts';
 import { addContact } from 'redux/toolkit/contacts/operations-contacts';
-
+import Button from 'components/Button/Button';
 import {
   StyledForm,
   StyledField,
   StyledLabel,
-  ButtonAdd,
+  // ButtonAdd,
   Counter,
 } from './FormForPhoneBook.styled';
 
@@ -96,10 +96,10 @@ export const FormForPhoneBook = () => {
           />
           <ErrorMessage name="number" component="div" />
         </StyledLabel>
-        <ButtonAdd type="submit" disabled={isLoading}>
+        <Button type="submit" disabled={isLoading}>
           {/* {isLoading && input !== '' && <ButtonSpiner />} */}
           Add contact
-        </ButtonAdd>
+        </Button>
       </StyledForm>
     </Formik>
   );
